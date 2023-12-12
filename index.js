@@ -77,12 +77,10 @@ function checkAuthentication(req, res, next) {
 const knex = require("knex")({
   client: "pg",
   connection: {
-    host:
-      process.env.DB_ENDPOINT ||
-      "intexdb.cn3jygf26agk.us-east-1.rds.amazonaws.com",
-    user: process.env.DB_USERNAME || "postgres",
-    password: process.env.DB_PASSWORD || "2BacN966J1da5F1",
-    database: process.env.DB_NAME || "intexDB",
+    host: process.env.DB_ENDPOINT || "",
+    user: process.env.DB_USERNAME || "",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
