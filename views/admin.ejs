@@ -1,0 +1,61 @@
+<!-- very similar to index.ejs but only account holders can see it. 
+has the dashboard on it and links. -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Page</title>
+  <link rel="icon" type="image/png" sizes="120x120" href="../images/fav/icons8-payoneer-color-120.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="../images/fav/icons8-payoneer-color-96.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/fav/icons8-payoneer-color-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/fav/icons8-payoneer-color-16.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../images/fav/icons8-payoneer-color-120.png">
+  <link rel="msapplication-square150x150logo" content="../images/fav/icons8-payoneer-color-120.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Montserrat&family=Raleway&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../styles/admin.css">
+  <style>
+
+  </style>
+</head>
+
+
+<body>
+  <form id="logout-form" action="/logout" method="post" style="display: none;">
+  </form>
+
+
+  <div class="sidebar" id="sidebar">
+    <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+    <a href="/accounts">Create Account</a>
+    <a href="/accountview">Edit Accounts</a>
+    <a href="/report">Report</a>
+    <a href="/survey">Survey</a>
+  </div>
+
+  <header>
+    <h1>Provo Media Health</h1>
+    <h2>Admin Page</h2>
+  </header>
+  <div class="line"></div>
+
+
+  <main>
+    <div class="powerbi">
+      <section class="powerbi-report">
+        <iframe title="Report Section" width="1000" height="703.5"
+          src="https://app.powerbi.com/view?r=eyJrIjoiYjJiYThhN2ItMzI5ZS00ZGRhLTgyODEtMTY0ZWFlYjcwMGE4IiwidCI6ImNlZDQ1MmVhLTExNDktNDMyOS05YjE5LWVhNjc4MzI5ZGU3OSIsImMiOjZ9"
+          frameborder="0" allowFullScreen="true"></iframe>
+      </section>
+    </div>
+
+  </main>
+</body>
+
+</html>

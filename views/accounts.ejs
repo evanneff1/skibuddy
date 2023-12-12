@@ -1,0 +1,41 @@
+<!-- The create account page, only accessible when logged in -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <link rel="stylesheet" type="text/css" href="styles/login.css">
+  <link rel="icon" type="image/png" sizes="120x120" href="../images/fav/icons8-payoneer-color-120.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="../images/fav/icons8-payoneer-color-96.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/fav/icons8-payoneer-color-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/fav/icons8-payoneer-color-16.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../images/fav/icons8-payoneer-color-120.png">
+  <link rel="msapplication-square150x150logo" content="../images/fav/icons8-payoneer-color-120.png">
+
+</head>
+<!-- create a new account -->
+<body>
+  <div>
+    <h1>Create Account</h1>
+    <form id="accCreate" method="post" action="/register">
+      <label for="new_username">Username</label>
+      <input type="text" name="new_username" id="new_username"><br><br>
+      <label for="new_password">Password</label>
+      <input type="password" name="new_password" id="new_password"><br><br>
+      <label for="passwordConf">Confirm Password</label>
+      <input type="password" name="passwordConf" id="passwordConf"><br><br>
+      <button type="submit">Create Account</button>
+    </form>
+
+    <!-- EJS to handle create account errors -->
+    <% if (typeof message !=='undefined' ) { %>
+      <p>
+        <%= message %>
+      </p>
+      <% } %>
+  </div>
+</body>
+
+</html>
