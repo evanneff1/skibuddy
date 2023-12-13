@@ -181,6 +181,78 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/dateskiing", async (req, res) => {
+  try {
+    const skiDates = req.body.skiDates;
+    const availableToDrive = req.body.availableToDrive;
+    const people = req.body.people;
+    console.log(skiDates, availableToDrive, people, "Request Body:", req.body);
+
+    // Check if arrays are of the same length
+    if (
+      !(
+        skiDates.length === availableToDrive.length &&
+        skiDates.length === people.length
+      )
+    ) {
+      return res.status(400).send("Invalid form submission");
+    }
+
+    // Process each row
+    for (let i = 0; i < skiDates.length; i++) {
+      // Insert into database - this is an example, adapt it to your database
+      const date = skiDates[i];
+      const driverStatus = availableToDrive[i];
+      const numberOfPeople = people[i];
+
+      // Your database insertion logic goes here
+      // Example: INSERT INTO SkiTrips (date, driverStatus, numberOfPeople) VALUES (date, driverStatus, numberOfPeople);
+      const new_user_date = await knex("userDate")
+        .insert({
+          date: date,
+          username: req.session.user.username,
+          driveStatus: driverStatus,
+          carCapacity: numberOfPeople,
+        })
+        .returning("anonymousID");
+    }
+
+    res.render("thankyou");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
+// app.get("/searchRides", async (req, res) => {
+//   const date_ride = req.body.date;
+
+//   const days_available = knex
+//     .select()
+//     .from("userDate")
+//     .where("date", date_ride);
+
+//   console.log(days_available);
+// });
+
+app.get("/searchRides", async (req, res) => {
+  try {
+    const dateRide = req.query.date; // Use req.query instead of req.body for GET requests
+
+    const daysAvailable = await knex
+      .select("date", "username", "driveStatus", "carCapacity")
+      .from("userDate")
+      .where("date", dateRide);
+    // .andWhere("driveStatus", "yes"); // Assuming you want to filter by 'yes' drive status
+
+    console.log(daysAvailable);
+    res.json(daysAvailable); // Send the results back as JSON
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error occurred while searching for rides.");
+  }
+});
+
 // Additional routes for various functionalities like survey submission, account management, etc.
 app.get("/success", (req, res) => {
   res.render("thankyou");
@@ -188,85 +260,6 @@ app.get("/success", (req, res) => {
 
 app.get("/error", (req, res) => {
   res.render("error");
-});
-
-app.post("/submit-survey", async (req, res) => {
-  try {
-    const {
-      question1: Age,
-      question2: Gender,
-      question3: RelationshipStatus,
-      question4: OccuStatus,
-      question5: OrgAffiliation,
-      question6: SMUse,
-      question7: platforms,
-      question8: AvgTime,
-      question9: UseWOPurpose,
-      question10: SMDistraction,
-      question11: Restless,
-      question12: GenDisctracted,
-      question13: BotheredWorries,
-      question14: Concentration,
-      question15: Comparison,
-      question16: CompFeelings,
-      question17: Validation,
-      question18: Depressed,
-      question19: DailyInterestFluctuation,
-      question20: SleepIssues,
-    } = req.body;
-    console.log("Validation Variable");
-    console.log(Validation);
-    console.log("Age Varibale");
-    console.log(Age);
-    console.log(parseInt(Age));
-
-    const platformsArray = Array.isArray(platforms) ? platforms : [platforms];
-
-    await knex.transaction(async (trx) => {
-      const insertResult = await trx("main")
-        .insert({
-          timestamp: trx.raw("current_timestamp"),
-          age: parseInt(Age),
-          gender: Gender,
-          relationshipStatus: RelationshipStatus,
-          occupationStatus: OccuStatus,
-          mediaUse: SMUse,
-          mediaDailyAvg: AvgTime,
-          mediaWOPurpose: UseWOPurpose,
-          distractedBusy: SMDistraction,
-          restlessness: Restless,
-          distractedGeneral: GenDisctracted,
-          botheredWorry: BotheredWorries,
-          concentration: Concentration,
-          comparison: Comparison,
-          compFeelings: CompFeelings,
-          validation: Validation,
-          depressed: Depressed,
-          dailyInterestFluctuations: DailyInterestFluctuation,
-          sleepIssues: SleepIssues,
-          Location: "Provo",
-        })
-        .returning("anonymousID");
-      const anonID = insertResult[0].anonymousID;
-
-      if (platformsArray && platformsArray.length > 0) {
-        const platformInserts = platformsArray.map((platform) => ({
-          anonID: parseInt(anonID),
-          platformNum: platform,
-        }));
-
-        await trx("platformUser").insert(platformInserts);
-      }
-      await trx("organizationUser").insert({
-        anonID: anonID,
-        organizationNum: OrgAffiliation,
-      });
-    });
-    res.json({ message: "Survey response submitted successfully" });
-  } catch (error) {
-    console.error("Error submitting survey response:", error);
-    res.status(500).send("Error submitting survey response");
-  }
 });
 
 app.get("/loginpage", (req, res) => {
