@@ -50,6 +50,7 @@ form {
 input {
   background-color: rgb(74, 74, 74);
   color: white;
+  font-family: sans-serif;
 }
 
 label {

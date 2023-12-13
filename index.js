@@ -77,10 +77,10 @@ function checkAuthentication(req, res, next) {
 const knex = require("knex")({
   client: "pg",
   connection: {
-    host: process.env.DB_ENDPOINT || "",
-    user: process.env.DB_USERNAME || "",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "",
+    host: process.env.DB_ENDPOINT || "localhost",
+    user: process.env.DB_USERNAME || "postgres",
+    password: process.env.DB_PASSWORD || "2BacN966J1da5F1",
+    database: process.env.DB_NAME || "bucketlist",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
@@ -102,7 +102,7 @@ app.post("/login", async (req, res) => {
     password = req.body.password;
     const result = await knex
       .select("username", "password")
-      .from("accountManager")
+      .from("users")
       .where("username", username);
 
     if (result.length > 0) {
@@ -157,7 +157,7 @@ app.post("/register", async (req, res) => {
 
     const userExists = await knex
       .select("username", "password")
-      .from("accountManager")
+      .from("users")
       .where("username", new_username);
 
     // console.log(userExists);
@@ -168,7 +168,7 @@ app.post("/register", async (req, res) => {
 
     const hashPass = await bcrypt.hash(new_password, saltRounds);
 
-    const newUser = await knex("accountManager").insert({
+    const newUser = await knex("users").insert({
       username: new_username,
       password: hashPass,
     });
