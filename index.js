@@ -89,7 +89,7 @@ const knex = require("knex")({
 // Route for the home page
 app.get("/", (req, res) => {
   if (req.session.user) {
-    res.render("admin");
+    res.render("home");
   } else {
     res.render("index");
   }
@@ -112,7 +112,7 @@ app.post("/login", async (req, res) => {
         req.session.user = {
           username: user.username,
         };
-        res.render("admin");
+        res.render("home");
       } else {
         res.render("login", { message: "Incorrect password" });
       }
@@ -137,7 +137,7 @@ app.post("/logout", (req, res) => {
 });
 
 // Route for handling creation of new account
-app.post("/register", checkAuthentication, async (req, res) => {
+app.post("/register", async (req, res) => {
   try {
     const new_username = req.body.new_username;
     const new_password = req.body.new_password;
@@ -273,11 +273,11 @@ app.get("/loginpage", (req, res) => {
   res.render("login");
 });
 
-app.get("/admin", checkAuthentication, (req, res) => {
-  res.render("admin");
+app.get("/home", checkAuthentication, (req, res) => {
+  res.render("home");
 });
 
-app.get("/accounts", checkAuthentication, (req, res) => {
+app.get("/accounts", (req, res) => {
   res.render("accounts");
 });
 
