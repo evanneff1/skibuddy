@@ -207,14 +207,12 @@ app.post("/dateskiing", async (req, res) => {
 
       // Your database insertion logic goes here
       // Example: INSERT INTO SkiTrips (date, driverStatus, numberOfPeople) VALUES (date, driverStatus, numberOfPeople);
-      const new_user_date = await knex("userDate")
-        .insert({
-          date: date,
-          username: req.session.user.username,
-          driveStatus: driverStatus,
-          carCapacity: numberOfPeople,
-        })
-        .returning("anonymousID");
+      const new_user_date = await knex("userDate").insert({
+        date: date,
+        username: req.session.user.username,
+        driveStatus: driverStatus,
+        carCapacity: numberOfPeople,
+      });
     }
 
     res.render("thankyou");
@@ -224,29 +222,31 @@ app.post("/dateskiing", async (req, res) => {
   }
 });
 
-// app.get("/searchRides", async (req, res) => {
-//   const date_ride = req.body.date;
-
-//   const days_available = knex
-//     .select()
-//     .from("userDate")
-//     .where("date", date_ride);
-
-//   console.log(days_available);
-// });
-
 app.get("/searchRides", async (req, res) => {
   try {
-    const dateRide = req.query.date; // Use req.query instead of req.body for GET requests
+    const dateRide = req.query.date;
 
-    const daysAvailable = await knex
+    let daysAvailable = await knex
       .select("date", "username", "driveStatus", "carCapacity")
       .from("userDate")
       .where("date", dateRide);
-    // .andWhere("driveStatus", "yes"); // Assuming you want to filter by 'yes' drive status
+
+    for (let iCount = 0; iCount < daysAvailable.length; iCount++) {
+      let user = daysAvailable[iCount].username;
+      let userEmails = await knex
+        .select("email") // Assuming 'email' is the column name
+        .from("users") // Assuming 'users' is the table name
+        .where("username", user);
+
+      if (userEmails.length > 0) {
+        daysAvailable[iCount].email = userEmails[0].email;
+      } else {
+        daysAvailable[iCount].email = "No email found";
+      }
+    }
 
     console.log(daysAvailable);
-    res.json(daysAvailable); // Send the results back as JSON
+    res.json(daysAvailable);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error occurred while searching for rides.");

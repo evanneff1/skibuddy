@@ -51,6 +51,10 @@ body {
   width: 80%;
 }
 
+#ride-results div {
+  background-color: #585757;
+  border-radius: 10px;
+}
 .background-container {
   position: relative;
   background-color: #2f2f2f;

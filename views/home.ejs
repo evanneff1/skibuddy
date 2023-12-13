@@ -58,7 +58,7 @@ has the dashboard on it and links. -->
 
         <section>
           <h2>Find a Ride</h2>
-          <form action="/searchRides" method="POST">
+          <form action="/searchRides" method="GET" id="find-ride-form">
             <label for="searchDate">Date:</label>
             <input type="date" id="searchDate" name="date" required>
 
@@ -102,23 +102,33 @@ has the dashboard on it and links. -->
     document.getElementById('logout-form').submit(); // Submit the hidden form
   });
 
+
   document.getElementById('find-ride-form').addEventListener('submit', function (e) {
     e.preventDefault();
     const searchDate = document.getElementById('searchDate').value;
 
-    fetch(`/findRide?searchDate=${searchDate}`)
+    fetch(`/searchRides?date=${searchDate}`)
       .then(response => response.json())
       .then(data => {
         const resultsContainer = document.getElementById('ride-results');
         resultsContainer.innerHTML = ''; // Clear previous results
         data.forEach(ride => {
           const rideElement = document.createElement('div');
-          rideElement.innerHTML = `Date: ${ride.date}, Driver: ${ride.username}, Capacity: ${ride.carCapacity}`;
+          rideElement.style.backgroundColor = 'grey';
+          rideElement.style.marginBottom = '10px';
+          rideElement.style.borderRadius = '10px';
+          rideElement.style.padding = '10px';
+          rideElement.style.marginTop = '10px';
+          rideElement.style.display = 'flex';
+          rideElement.style.alignItems = 'center';
+          rideElement.style.justifyContent = 'center';
+          rideElement.innerHTML = `Driver: ${ride.username} <br> Capacity: ${ride.carCapacity} <br> Contact: ${ride.email}`;
           resultsContainer.appendChild(rideElement);
-        });
-      })
-      .catch(error => console.error('Error:', error));
-  });
+        })
+          .catch(error => console.error('Error:', error));
+      });
+  })
+
 </script>
 
 
