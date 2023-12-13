@@ -30,32 +30,71 @@ has the dashboard on it and links. -->
   <form id="logout-form" action="/logout" method="post" style="display: none;">
   </form>
 
-
-  <div class="sidebar" id="sidebar">
-    <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
-    <a href="/accounts">Create Account</a>
-    <a href="/accountview">Edit Accounts</a>
-    <a href="/report">Report</a>
-    <a href="/survey">Survey</a>
-  </div>
-
   <header>
-    <h1>Provo Media Health</h1>
-    <h2>Admin Page</h2>
+    <a href="#" id="logout-link">Logout</a>
+    <a href="/skidate" id="addskidays">When are you going skiing?</a>
+
   </header>
-  <div class="line"></div>
-
-
   <main>
-    <div class="powerbi">
-      <section class="powerbi-report">
-        <iframe title="Report Section" width="1000" height="703.5"
-          src="https://app.powerbi.com/view?r=eyJrIjoiYjJiYThhN2ItMzI5ZS00ZGRhLTgyODEtMTY0ZWFlYjcwMGE4IiwidCI6ImNlZDQ1MmVhLTExNDktNDMyOS05YjE5LWVhNjc4MzI5ZGU3OSIsImMiOjZ9"
-          frameborder="0" allowFullScreen="true"></iframe>
-      </section>
-    </div>
+    <h1>Welcome to the Ski Commuter App!</h1>
 
+    <section>
+      <h2>Post a Commute Message</h2>
+      <form action="/postMessage" method="POST">
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <label for="date">Date of Skiing:</label>
+        <input type="date" id="date" name="date" required>
+
+        <input type="submit" value="Post Message">
+      </form>
+    </section>
+
+    <section>
+      <h2>Find a Ride</h2>
+      <form action="/searchRides" method="GET">
+        <label for="searchDate">Date:</label>
+        <input type="date" id="searchDate" name="date" required>
+
+        <input type="submit" value="Search">
+      </form>
+    </section>
+
+    <!-- Display community messages here -->
+    <section id="message-board">
+      <h2>Community Messages</h2>
+      <% if (messages && messages.length) { %>
+        <div class="chat-container">
+          <% messages.forEach(function(message) { %>
+            <div class="chat-message">
+              <strong>
+                <%= message.user %>:
+              </strong>
+              <p>
+                <%= message.message %>
+              </p>
+              <span class="message-date">
+                <%= message.date %>
+              </span>
+            </div>
+            <% }); %>
+        </div>
+        <% } else { %>
+          <p>No messages yet.</p>
+          <% } %>
+    </section>
   </main>
+
+  <footer>
+    <!-- Footer content -->
+  </footer>
 </body>
+<script>
+  document.getElementById('logout-link').addEventListener('click', function (e) {
+    e.preventDefault(); // Prevent the default anchor behavior
+    document.getElementById('logout-form').submit(); // Submit the hidden form
+  });
+</script>
 
 </html>

@@ -112,7 +112,7 @@ app.post("/login", async (req, res) => {
         req.session.user = {
           username: user.username,
         };
-        res.render("home");
+        res.redirect("/home");
       } else {
         res.render("login", { message: "Incorrect password" });
       }
@@ -274,38 +274,48 @@ app.get("/loginpage", (req, res) => {
 });
 
 app.get("/home", checkAuthentication, (req, res) => {
-  res.render("home");
+  knex
+    .select()
+    .from("messages")
+    .then((messages) => {
+      res.render("home", { messages: messages });
+    });
 });
 
 app.get("/accounts", (req, res) => {
   res.render("accounts");
 });
 
-app.get("/report", checkAuthentication, async (req, res) => {
+app.post("/postMessage", async (req, res) => {
   try {
-    const drop = req.query.dropdown || "All Users";
-    let intex_db;
-    drop_db = await knex.select().from("main").orderBy("anonymousID", "desc");
+    const new_message = req.body.message;
+    const user_post = req.session.user.username;
+    const date_post = req.body.date;
 
-    if (drop == "All Users") {
-      intex_db = await knex
-        .select()
-        .from("main")
-        .orderBy("anonymousID", "desc");
-    } else {
-      intex_db = await knex
-        .select()
-        .from("main")
-        .where("anonymousID", drop)
-        .orderBy("anonymousID", "desc");
-    }
-    drop_db.push("All Users");
+    console.log(
+      "Message:",
+      new_message,
+      "User:",
+      user_post,
+      "Date:",
+      date_post
+    );
 
-    res.render("report", { intex_db: intex_db, drop_db: drop_db });
+    const newUser = await knex("messages").insert({
+      message: new_message,
+      date: date_post,
+      user: user_post,
+    });
+    res.redirect("/home");
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    console.error(error);
+    res.render("home", { message: "Error registering new user" });
+    // res.status(500).send("Error registering new user");
   }
+});
+
+app.get("/skidate", checkAuthentication, (req, res) => {
+  res.render("ski-date");
 });
 
 app.get("/accountview", checkAuthentication, (req, res) => {

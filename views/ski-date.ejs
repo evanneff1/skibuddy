@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Ski Date and Drive Availability</title>
+  <style>
+    body {
+      background-color: #2f2f2f;
+    }
+
+    * {
+      padding: 10px;
+    }
+
+    #ski-date-form {
+      background-color: #000000;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px auto;
+      max-width: 500px;
+    }
+
+    #ski-date-form h2 {
+      color: white;
+      font-family: "sisters-four", sans-serif;
+    }
+
+    #ski-date-form form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #ski-date-form label {
+      margin-top: 10px;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    #ski-date-form input[type="date"],
+    #ski-date-form select {
+      padding: 10px;
+      border-radius: 4px;
+      border: none;
+    }
+
+    #ski-date-form input[type="submit"] {
+      background-color: rgb(37, 71, 134);
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 15px;
+    }
+
+    #ski-date-form input[type="submit"]:hover {
+      background-color: rgb(28, 54, 104);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <!-- Navigation and other header content -->
+    <a href="/home">Home</a>
+  </header>
+
+  <main>
+    <section id="ski-date-form">
+      <h2>Plan Your Ski Trip</h2>
+      <form action="/dateskiing" method="POST" id="date-form">
+        <div id="date-inputs">
+          <div class="date-input-row">
+            <div class="date-input">
+              <label for="ski-date-1">Date of Skiing:</label>
+              <input type="date" id="ski-date-1" name="skiDates[]" required>
+            </div>
+            <div class="drive-input">
+              <label for="available-to-drive-1">Available to Drive:</label>
+              <select id="available-to-drive-1" name="availableToDrive[]" required>
+                <option value="">Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <div class="people-input">
+              <label for="people-1">Number of People:</label>
+              <input type="number" id="people-1" name="people[]" min="1" max="10" required>
+            </div>
+            <button type="button" class="remove-date" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>
+        <button type="button" id="add-date">Add Another Date</button>
+        <input type="submit" value="Submit">
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <!-- Footer content -->
+  </footer>
+
+  <script>
+    document.getElementById('add-date').addEventListener('click', function () {
+      var container = document.getElementById('date-inputs');
+      var inputCount = container.getElementsByClassName('date-input-row').length;
+      var newRow = container.children[0].cloneNode(true);
+
+      newRow.getElementsByClassName('date-input')[0].children[1].id = 'ski-date-' + (inputCount + 1);
+      newRow.getElementsByClassName('drive-input')[0].children[1].id = 'available-to-drive-' + (inputCount + 1);
+      newRow.getElementsByClassName('people-input')[0].children[1].id = 'people-' + (inputCount + 1);
+
+      container.appendChild(newRow);
+    });
+
+    function removeRow(button) {
+      var row = button.parentNode;
+      row.parentNode.removeChild(row);
+    }
+  </script>
+</body>
+
+</html>
