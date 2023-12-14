@@ -17,156 +17,100 @@
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Montserrat&family=Raleway&display=swap"
     rel="stylesheet">
   <style>
-    /* Basic Reset and Font */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Raleway", sans-serif;
-    }
-
-    /* Body Styling */
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-size: 16px;
-      background-image: url("../images/blob.jpg");
-      /* The path to your image file */
-      background-size: cover;
-      /* Cover the entire space */
-      background-position: center;
-      /* Center the image */
-      background-repeat: no-repeat;
-      /* Do not repeat the image */
-    }
-
-    /* Div Styling */
-    .edit {
-      background: white;
-      padding: 30px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 350px;
-    }
-
-    fieldset {
-      border: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    /* Heading */
-    h1 {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 20px;
       color: #333;
+    }
+
+    .homeicon a {
+      display: inline-block;
       margin-bottom: 20px;
     }
 
-    /* Form Styling */
-    form {
-      text-align: left;
+    .homeicon img {
+      vertical-align: middle;
     }
 
-    /* Label Styling */
-    label {
-      display: block;
+    .edit {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .edit h2 {
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    .edit form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .edit label {
       margin-bottom: 5px;
-      color: #333;
-      font-size: large;
-      padding: 10px
     }
 
-    /* Input Fields Styling */
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
+    .edit input[type="text"],
+    .edit select {
       padding: 10px;
       margin-bottom: 20px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
-    /* Input Focus Styling */
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      border-color: #007bff;
-      outline: none;
+    .edit button {
+      background-color: #4CAF50;
+      /* Green */
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
-    .button a {
+    .edit button:hover {
+      background-color: #367B35;
+    }
+
+    .edit .button a {
+      display: inline-block;
+      background-color: #f44336;
+      /* Red */
+      color: white;
+      padding: 10px 20px;
+      border-radius: 4px;
       text-decoration: none;
-      color: white;
+      transition: background-color 0.3s ease;
     }
 
-    .button {
-      width: 100%;
-      padding: 10px;
-      background-color: #5eb98d;
-      color: white;
+    .edit .button a:hover {
+      background-color: #c0392b;
+    }
+
+    fieldset {
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-      margin-top: 10px
     }
 
-    .button:hover {
-      background-color: #2d6048;
-    }
-
-    /* Button Styling */
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #5eb98d;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-
-    /* Button Hover Effect */
-    button:hover {
-      background-color: #2d6048;
-    }
-
-    /* Button Focus */
-    button:focus {
-      outline: none;
-    }
-
-    /* Spacing and Paragraph Styling */
-    br {
-      line-height: 1.5;
-    }
-
-    p {
-      color: red;
-      margin-top: 10px;
-    }
-
-    /* Home Icon Styling */
-    .homeicon {
-      width: 100%;
-      height: auto;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      position: absolute;
-      top: 10px;
-      padding: 10px;
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .edit {
+        width: 100%;
+        padding: 10px;
+      }
     }
   </style>
 </head>
 <!-- pulls the old username and password from the previous page. the user can 
   change the password to a new one. it updates in the database. -->
+
 <body>
   <div class="homeicon"><a href="/"><img src="../images/home.svg" alt="Home" height="40px"></a></div>
   <div class="edit">
@@ -183,23 +127,25 @@
         <input type="text" id="name" name="name" value="<%=myAccount[0].name%>">
         <br><br>
         <label for="resort">Resort</label>
-<select id="resort" name="resort">
-  <option value="Alta" <%= myAccount[0].resort === 'Alta' ? 'selected' : '' %>>Alta</option>
-  <option value="Beaver" <%= myAccount[0].resort === 'Beaver' ? 'selected' : '' %>>Beaver</option>
-  <option value="Brian Head" <%= myAccount[0].resort === 'Brian Head' ? 'selected' : '' %>>Brian Head</option>
-  <option value="Brighton" <%= myAccount[0].resort === 'Brighton' ? 'selected' : '' %>>Brighton</option>
-  <option value="Cherry Peak" <%= myAccount[0].resort === 'Cherry Peak' ? 'selected' : '' %>>Cherry Peak</option>
-  <option value="Deer Valley" <%= myAccount[0].resort === 'Deer Valley' ? 'selected' : '' %>>Deer Valley</option>
-  <option value="Eagle Point" <%= myAccount[0].resort === 'Eagle Point' ? 'selected' : '' %>>Eagle Point</option>
-  <option value="Nordic Valley" <%= myAccount[0].resort === 'Nordic Valley' ? 'selected' : '' %>>Nordic Valley</option>
-  <option value="Park City" <%= myAccount[0].resort === 'Park City' ? 'selected' : '' %>>Park City</option>
-  <option value="Powder Mountain" <%= myAccount[0].resort === 'Powder Mountain' ? 'selected' : '' %>>Powder Mountain</option>
-  <option value="Snowbasin" <%= myAccount[0].resort === 'Snowbasin' ? 'selected' : '' %>>Snowbasin</option>
-  <option value="Snowbird" <%= myAccount[0].resort === 'Snowbird' ? 'selected' : '' %>>Snowbird</option>
-  <option value="Solitude" <%= myAccount[0].resort === 'Solitude' ? 'selected' : '' %>>Solitude</option>
-  <option value="Sundance" <%= myAccount[0].resort === 'Sundance' ? 'selected' : '' %>>Sundance</option>
-  <option value="Woodward" <%= myAccount[0].resort === 'Woodward' ? 'selected' : '' %>>Woodward</option>
-</select>
+        <select id="resort" name="resort">
+          <option value="Alta" <%=myAccount[0].resort==='Alta' ? 'selected' : '' %>>Alta</option>
+          <option value="Beaver" <%=myAccount[0].resort==='Beaver' ? 'selected' : '' %>>Beaver</option>
+          <option value="Brian Head" <%=myAccount[0].resort==='Brian Head' ? 'selected' : '' %>>Brian Head</option>
+          <option value="Brighton" <%=myAccount[0].resort==='Brighton' ? 'selected' : '' %>>Brighton</option>
+          <option value="Cherry Peak" <%=myAccount[0].resort==='Cherry Peak' ? 'selected' : '' %>>Cherry Peak</option>
+          <option value="Deer Valley" <%=myAccount[0].resort==='Deer Valley' ? 'selected' : '' %>>Deer Valley</option>
+          <option value="Eagle Point" <%=myAccount[0].resort==='Eagle Point' ? 'selected' : '' %>>Eagle Point</option>
+          <option value="Nordic Valley" <%=myAccount[0].resort==='Nordic Valley' ? 'selected' : '' %>>Nordic Valley
+          </option>
+          <option value="Park City" <%=myAccount[0].resort==='Park City' ? 'selected' : '' %>>Park City</option>
+          <option value="Powder Mountain" <%=myAccount[0].resort==='Powder Mountain' ? 'selected' : '' %>>Powder
+            Mountain</option>
+          <option value="Snowbasin" <%=myAccount[0].resort==='Snowbasin' ? 'selected' : '' %>>Snowbasin</option>
+          <option value="Snowbird" <%=myAccount[0].resort==='Snowbird' ? 'selected' : '' %>>Snowbird</option>
+          <option value="Solitude" <%=myAccount[0].resort==='Solitude' ? 'selected' : '' %>>Solitude</option>
+          <option value="Sundance" <%=myAccount[0].resort==='Sundance' ? 'selected' : '' %>>Sundance</option>
+          <option value="Woodward" <%=myAccount[0].resort==='Woodward' ? 'selected' : '' %>>Woodward</option>
+        </select>
 
         <label for="email">email:</label>
         <input type="text" id="email" name="email" value="<%=myAccount[0].email%>">

@@ -15,56 +15,43 @@
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Montserrat&family=Raleway&display=swap"
     rel="stylesheet">
   <style>
-    * {
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f7f7;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: "Raleway", sans-serif;
-    }
-
-    body {
-      /* background-color: #f4f4f4; */
-      background-image: url("../images/blob.jpg");
-      /* The path to your image file */
-      background-size: 100%;
-      /* Cover the entire space */
-      background-position: center;
-      /* Center the image */
-      background-repeat: no-repeat;
-      /* Do not repeat the image */
-      /* Removed the background-attachment property */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
     }
 
     main {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100vh;
-
+      text-align: center;
+      background-color: white;
+      padding: 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
     }
 
-    div {
-      background-color: rgb(54, 172, 133);
-      padding: 20px;
-      margin-top: 30px;
-      transition: background-color 0.3s ease-in-out;
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 20px;
     }
 
-    div:hover {
-      background-color: rgb(76, 106, 96);
-    }
-
-    div a {
+    a {
+      display: inline-block;
       text-decoration: none;
-      color: rgb(233, 232, 232);
-      transition: color 0.3s ease-in-out;
-
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
     }
 
-    div:hover a {
-      color: white;
+    a:hover {
+      background-color: #367B35;
     }
   </style>
 </head>
