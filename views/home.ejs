@@ -1,5 +1,4 @@
-<!-- very similar to index.ejs but only account holders can see it. 
-has the dashboard on it and links. -->
+<!-- This is the home landing page, where the user will be able to see all of the info about skiing and also being able to get in contact with other people to go skiing-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +20,14 @@ has the dashboard on it and links. -->
     rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="../styles/admin.css">
   <style>
-
+    header {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      background-color: grey;
+    }
   </style>
 </head>
 
@@ -34,8 +40,6 @@ has the dashboard on it and links. -->
     <a href="#" id="logout-link">Logout</a>
     <a href="/skidate" id="addskidays">When are you going skiing?</a>
     <a href="/accountview" id="checkAccount">view account</a>
-
-
   </header>
   <main>
     <h1>Welcome to the Ski Commuter App!</h1>
@@ -45,10 +49,6 @@ has the dashboard on it and links. -->
       <form action="/postMessage" method="POST">
         <label for="message">Message:</label>
         <textarea id="message" name="message" required></textarea>
-
-        <!-- <label for="date">Date of Skiing:</label>
-        <input type="date" id="date" name="date" required> -->
-
         <button type="submit">Submit</button>
       </form>
     </section>
@@ -89,11 +89,9 @@ has the dashboard on it and links. -->
     </section>
   </main>
 
-  <footer>
-    <!-- Footer content -->
-  </footer>
 </body>
 <script>
+  // Some javascript to handle the logging out and also the showing when other people are skiing
   document.getElementById('logout-link').addEventListener('click', function (e) {
     e.preventDefault(); // Prevent the default anchor behavior
     document.getElementById('logout-form').submit(); // Submit the hidden form

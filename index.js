@@ -65,14 +65,6 @@ function checkAuthentication(req, res, next) {
   }
 }
 
-// Middleware to enforce HTTPS in production
-// app.use((req, res, next) => {
-//   if (!req.secure && req.get("x-forwarded-proto") !== "https") {
-//     return res.redirect("https://" + req.get("host") + req.url);
-//   }
-//   next();
-// });
-
 // Configuring knex for PostgreSQL database access
 const knex = require("knex")({
   client: "pg",
@@ -88,19 +80,6 @@ const knex = require("knex")({
     // ssl: true,
   },
 });
-
-// const knex = require("knex")({
-//   client: "pg",
-//   connection: {
-//     host: process.env.DB_ENDPOINT || "localhost",
-//     user: process.env.DB_USERNAME || "postgres",
-//     password: process.env.DB_PASSWORD || "2BacN966J1da5F1",
-//     database: process.env.DB_NAME || "bucketlist",
-//     port: process.env.RDS_PORT || 5432,
-//     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
-//     // ssl: true,
-//   },
-// });
 
 // Route for the home page
 app.get("/", (req, res) => {
@@ -163,12 +142,10 @@ app.post("/register", async (req, res) => {
 
     if (!new_password) {
       res.render("accounts", { message: "Password is required" });
-      // return res.status(400).send("Password is required");
     }
 
     if (new_password != passwordConf) {
       res.render("accounts", { message: "Passwords need to match" });
-      // return res.status(400).send("Passwords need to match");
     }
 
     const userExists = await knex
@@ -176,10 +153,8 @@ app.post("/register", async (req, res) => {
       .from("accounts")
       .where("username", new_username);
 
-    // console.log(userExists);
     if (userExists == "[]") {
       res.render("accounts", { message: "Username already taken" });
-      // return res.status(400).send("Username already taken.");
     }
 
     const hashPass = await bcrypt.hash(new_password, saltRounds);
@@ -198,14 +173,13 @@ app.post("/register", async (req, res) => {
       });
     });
     res.redirect("/accountview");
-    // res.render("accountview");
   } catch (error) {
     console.error(error);
     res.render("accounts", { message: "Error registering new user" });
-    // res.status(500).send("Error registering new user");
   }
 });
 
+// Route to post when you are going skiing so others can see
 app.post("/dateskiing", async (req, res) => {
   try {
     const skiDates = req.body.skiDates;
@@ -225,13 +199,10 @@ app.post("/dateskiing", async (req, res) => {
 
     // Process each row
     for (let i = 0; i < skiDates.length; i++) {
-      // Insert into database - this is an example, adapt it to your database
       const date = skiDates[i];
       const driverStatus = availableToDrive[i];
       const numberOfPeople = people[i];
 
-      // Your database insertion logic goes here
-      // Example: INSERT INTO SkiTrips (date, driverStatus, numberOfPeople) VALUES (date, driverStatus, numberOfPeople);
       const new_user_date = await knex("userDate").insert({
         date: date,
         username: req.session.user.username,
@@ -247,6 +218,7 @@ app.post("/dateskiing", async (req, res) => {
   }
 });
 
+// Route to handle when you want to find rides
 app.get("/searchRides", async (req, res) => {
   try {
     const dateRide = req.query.date;
@@ -320,7 +292,6 @@ app.post("/postMessage", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.redirect("/home");
-    // res.status(500).send("Error registering new user");
   }
 });
 
@@ -358,7 +329,6 @@ app.post("/editAccountReal", checkAuthentication, async (req, res) => {
   const username = req.session.user.username;
 
   const { name: name, resort: resort, email: email } = req.body;
-  // const newHashPass = await bcrypt.hash(update_password, saltRounds);
   knex("userInfo")
     .where("username", username)
     .update({
