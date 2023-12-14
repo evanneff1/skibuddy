@@ -30,20 +30,20 @@ body {
   font-family: "gravesend-sans", sans-serif;
   font-weight: 500;
   font-style: normal;
+  display: flex;
+  flex-direction: column;
 }
 
 #elevate {
-  font-size: 130px;
-  position: absolute;
-  top: 20vh;
+  font-size: 10em;
+
   width: 100%;
 }
 #join {
-  font-size: 80px;
+  font-size: 3em;
   color: rgb(37, 71, 134);
   padding-left: 30px;
-  position: absolute;
-  top: 40vh;
+
   width: 100%;
 }
 
