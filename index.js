@@ -1,7 +1,7 @@
-// Index 2023 Project
+// 403 Project 3
 // Evan Neff, Thomas Nielsen, Zach Edgerton, Tristan McLaughlin
 // Section 04 - Group 14
-// ProvoMediaHealth.com
+// PowderConnect.com
 ////////////////////////////////////////////////
 // This is the main hub for our website. This code handles all the requests that
 // come into the site and directs them to anywhere they need to go. This code is made up
@@ -314,7 +314,7 @@ app.post("/postMessage", async (req, res) => {
     const newUser = await knex("messages").insert({
       message: new_message,
       date: knex.raw("current_timestamp"),
-      user: user_post,
+      username: user_post,
     });
     res.redirect("/home");
   } catch (error) {
