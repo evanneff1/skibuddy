@@ -77,12 +77,15 @@ function checkAuthentication(req, res, next) {
 const knex = require("knex")({
   client: "pg",
   connection: {
-    host: process.env.DB_ENDPOINT || "localhost",
+    host:
+      process.env.DB_ENDPOINT ||
+      "skidb.cfgrnegvlywz.us-east-1.rds.amazonaws.com",
     user: process.env.DB_USERNAME || "postgres",
-    password: process.env.DB_PASSWORD || "admin",
-    database: process.env.DB_NAME || "practice1",
+    password: process.env.DB_PASSWORD || "22227777",
+    database: process.env.DB_NAME || "skibuddy",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
+    // ssl: true,
   },
 });
 
@@ -112,7 +115,7 @@ app.post("/login", async (req, res) => {
         req.session.user = {
           username: user.username,
         };
-        res.render("home");
+        res.redirect("/home");
       } else {
         res.render("login", { message: "Incorrect password" });
       }
@@ -173,17 +176,14 @@ app.post("/register", async (req, res) => {
       password: hashPass,
     });
     await knex.transaction(async (trx) => {
-        const insertResult = await trx("userInfo")
-          .insert({
-            username: new_username,
-            name: '',
-            email: '',
-  
-            resort: '',
-            
-          })
-      
-  })
+      const insertResult = await trx("userInfo").insert({
+        username: new_username,
+        name: "",
+        email: "",
+
+        resort: "",
+      });
+    });
     res.redirect("/accountview");
     // res.render("accountview");
   } catch (error) {
@@ -247,7 +247,7 @@ app.get("/searchRides", async (req, res) => {
       let user = daysAvailable[iCount].username;
       let userEmails = await knex
         .select("email") // Assuming 'email' is the column name
-        .from("accounts") // Assuming 'users' is the table name
+        .from("userInfo") // Assuming 'users' is the table name
         .where("username", user);
 
       if (userEmails.length > 0) {
@@ -295,7 +295,7 @@ app.post("/postMessage", async (req, res) => {
   try {
     const new_message = req.body.message;
     const user_post = req.session.user.username;
-    const date_post = req.body.date;
+    // const date_post = req.body.date;
 
     console.log(
       "Message:",
@@ -308,7 +308,7 @@ app.post("/postMessage", async (req, res) => {
 
     const newUser = await knex("messages").insert({
       message: new_message,
-      date: date_post,
+      date: knex.raw("current_timestamp"),
       user: user_post,
     });
     res.redirect("/home");
@@ -325,60 +325,57 @@ app.get("/skidate", checkAuthentication, (req, res) => {
 
 app.get("/accountview", checkAuthentication, (req, res) => {
   const username = req.session.user.username;
-knex
-  .select()
-  .from("userInfo")
-  .where("username", username)
-  .then((thing) => {
-    res.render("accountview", { myAccounts: thing });
-  });
+  knex
+    .select()
+    .from("userInfo")
+    .where("username", username)
+    .then((thing) => {
+      res.render("accountview", { myAccounts: thing });
+    });
 });
 
 app.get("/editAccount", checkAuthentication, (req, res) => {
   const username = req.session.user.username;
-knex
-  .select()
-  .from("userInfo")
-  .where("username", username)
-  .then((thing) => {
-    res.render("editAccount", { myAccount: thing });
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).json({ err });
-  });
+  knex
+    .select()
+    .from("userInfo")
+    .where("username", username)
+    .then((thing) => {
+      res.render("editAccount", { myAccount: thing });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ err });
+    });
 });
 
 app.post("/editAccountReal", checkAuthentication, async (req, res) => {
   const username = req.session.user.username;
-  
-  const { name: name, resort: resort, email: email} = req.body;
+
+  const { name: name, resort: resort, email: email } = req.body;
   // const newHashPass = await bcrypt.hash(update_password, saltRounds);
   knex("userInfo")
-  .where("username", username)
-  .update({
+    .where("username", username)
+    .update({
       name: name,
       resort: resort,
 
       email: email,
       username: username,
-
-  })
-  .then((rowsAffected) => {
+    })
+    .then((rowsAffected) => {
       console.log("Rows affected:", rowsAffected);
       if (rowsAffected > 0) {
-      res.redirect("/accountview");
+        res.redirect("/accountview");
       } else {
-      res.status(404).send("Account not found or no changes made.");
+        res.status(404).send("Account not found or no changes made.");
       }
-  })
-  .catch((err) => {
+    })
+    .catch((err) => {
       console.error(err);
       res.status(500).send("Error updating account. Please try again.");
-  });
-  
-}
-);
+    });
+});
 
 app.get("/survey", (req, res) => {
   res.render("survey");
