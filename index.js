@@ -89,6 +89,19 @@ const knex = require("knex")({
   },
 });
 
+// const knex = require("knex")({
+//   client: "pg",
+//   connection: {
+//     host: process.env.DB_ENDPOINT || "localhost",
+//     user: process.env.DB_USERNAME || "postgres",
+//     password: process.env.DB_PASSWORD || "2BacN966J1da5F1",
+//     database: process.env.DB_NAME || "bucketlist",
+//     port: process.env.RDS_PORT || 5432,
+//     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
+//     // ssl: true,
+//   },
+// });
+
 // Route for the home page
 app.get("/", (req, res) => {
   if (req.session.user) {
@@ -295,16 +308,8 @@ app.post("/postMessage", async (req, res) => {
   try {
     const new_message = req.body.message;
     const user_post = req.session.user.username;
-    // const date_post = req.body.date;
 
-    console.log(
-      "Message:",
-      new_message,
-      "User:",
-      user_post,
-      "Date:",
-      date_post
-    );
+    console.log("Message:", new_message, "User:", user_post, "Date:");
 
     const newUser = await knex("messages").insert({
       message: new_message,
@@ -314,7 +319,7 @@ app.post("/postMessage", async (req, res) => {
     res.redirect("/home");
   } catch (error) {
     console.error(error);
-    res.render("home", { message: "Error registering new user" });
+    res.redirect("/home");
     // res.status(500).send("Error registering new user");
   }
 });
