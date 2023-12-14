@@ -79,8 +79,8 @@ const knex = require("knex")({
   connection: {
     host: process.env.DB_ENDPOINT || "localhost",
     user: process.env.DB_USERNAME || "postgres",
-    password: process.env.DB_PASSWORD || "2BacN966J1da5F1",
-    database: process.env.DB_NAME || "bucketlist",
+    password: process.env.DB_PASSWORD || "admin",
+    database: process.env.DB_NAME || "practice1",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
@@ -102,17 +102,17 @@ app.post("/login", async (req, res) => {
     password = req.body.password;
     const result = await knex
       .select("username", "password")
-      .from("users")
+      .from("accounts")
       .where("username", username);
 
     if (result.length > 0) {
       const user = result[0];
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (validPassword) {
+    //   const validPassword = await bcrypt.compare(password, user.password);
+      if (password) {
         req.session.user = {
           username: user.username,
         };
-        res.redirect("/home");
+        res.render("home");
       } else {
         res.render("login", { message: "Incorrect password" });
       }
@@ -157,7 +157,7 @@ app.post("/register", async (req, res) => {
 
     const userExists = await knex
       .select("username", "password")
-      .from("users")
+      .from("accounts")
       .where("username", new_username);
 
     // console.log(userExists);
@@ -168,10 +168,22 @@ app.post("/register", async (req, res) => {
 
     const hashPass = await bcrypt.hash(new_password, saltRounds);
 
-    const newUser = await knex("users").insert({
+    const newUser = await knex("accounts").insert({
       username: new_username,
       password: hashPass,
     });
+    await knex.transaction(async (trx) => {
+        const insertResult = await trx("userInfo")
+          .insert({
+            username: new_username,
+            name: '',
+            email: '',
+  
+            resort: '',
+            
+          })
+      
+  })
     res.redirect("/accountview");
     // res.render("accountview");
   } catch (error) {
@@ -235,7 +247,7 @@ app.get("/searchRides", async (req, res) => {
       let user = daysAvailable[iCount].username;
       let userEmails = await knex
         .select("email") // Assuming 'email' is the column name
-        .from("users") // Assuming 'users' is the table name
+        .from("accounts") // Assuming 'users' is the table name
         .where("username", user);
 
       if (userEmails.length > 0) {
@@ -312,71 +324,61 @@ app.get("/skidate", checkAuthentication, (req, res) => {
 });
 
 app.get("/accountview", checkAuthentication, (req, res) => {
-  knex
-    .select()
-    .from("accountManager")
-    .then((thing) => {
-      res.render("accountview", { myAccounts: thing });
-    });
+  const username = req.session.user.username;
+knex
+  .select()
+  .from("userInfo")
+  .where("username", username)
+  .then((thing) => {
+    res.render("accountview", { myAccounts: thing });
+  });
 });
 
-app.get("/editAccount/:id", checkAuthentication, (req, res) => {
-  knex
-    .select("username", "password")
-    .from("accountManager")
-    .where("username", req.params.id)
-    .then((thing) => {
-      res.render("editAccount", { myAccount: thing });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ err });
-    });
+app.get("/editAccount", checkAuthentication, (req, res) => {
+  const username = req.session.user.username;
+knex
+  .select()
+  .from("userInfo")
+  .where("username", username)
+  .then((thing) => {
+    res.render("editAccount", { myAccount: thing });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err });
+  });
 });
 
-app.post(
-  "/editAccountReal/:username",
-  checkAuthentication,
-  async (req, res) => {
-    if (req.params.username != "admin") {
-      const { password: update_password } = req.body;
-      const newHashPass = await bcrypt.hash(update_password, saltRounds);
-      knex("accountManager")
-        .where("username", req.params.username)
-        .update({
-          password: newHashPass,
-        })
-        .then((rowsAffected) => {
-          console.log("Rows affected:", rowsAffected);
-          if (rowsAffected > 0) {
-            res.redirect("/accountview");
-          } else {
-            res.status(404).send("Account not found or no changes made.");
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).send("Error updating account. Please try again.");
-        });
-    } else {
-      res.status(404).send("You cannot edit admin username or password");
-    }
-  }
-);
+app.post("/editAccountReal", checkAuthentication, async (req, res) => {
+  const username = req.session.user.username;
+  
+  const { name: name, resort: resort, email: email} = req.body;
+  // const newHashPass = await bcrypt.hash(update_password, saltRounds);
+  knex("userInfo")
+  .where("username", username)
+  .update({
+      name: name,
+      resort: resort,
 
-app.post("/deleteAccount/:username", checkAuthentication, (req, res) => {
-  const username = req.params.username;
-  knex("accountManager")
-    .where("username", username)
-    .del()
-    .then(() => {
+      email: email,
+      username: username,
+
+  })
+  .then((rowsAffected) => {
+      console.log("Rows affected:", rowsAffected);
+      if (rowsAffected > 0) {
       res.redirect("/accountview");
-    })
-    .catch((err) => {
+      } else {
+      res.status(404).send("Account not found or no changes made.");
+      }
+  })
+  .catch((err) => {
       console.error(err);
-      res.status(500).send("Internal Server Error");
-    });
-});
+      res.status(500).send("Error updating account. Please try again.");
+  });
+  
+}
+);
 
 app.get("/survey", (req, res) => {
   res.render("survey");

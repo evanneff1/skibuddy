@@ -171,16 +171,38 @@
   <div class="homeicon"><a href="/"><img src="../images/home.svg" alt="Home" height="40px"></a></div>
   <div class="edit">
     <h2>Edit your account:</h2>
-    <form action="/editAccountReal/<%=myAccount[0].username %>" method="POST">
+    <form action="/editAccountReal" method="POST">
       <fieldset>
-
+        <br><br><br><br><br><br><br><br><br>
         <label>Username:</label>
         <h3>
           <%=myAccount[0].username %>
         </h3>
         <br><br>
-        <label for="password">Password:</label>
-        <input type="text" id="password" name="password">
+        <label for="name">name:</label>
+        <input type="text" id="name" name="name" value="<%=myAccount[0].name%>">
+        <br><br>
+        <label for="resort">Resort</label>
+<select id="resort" name="resort">
+  <option value="Alta" <%= myAccount[0].resort === 'Alta' ? 'selected' : '' %>>Alta</option>
+  <option value="Beaver" <%= myAccount[0].resort === 'Beaver' ? 'selected' : '' %>>Beaver</option>
+  <option value="Brian Head" <%= myAccount[0].resort === 'Brian Head' ? 'selected' : '' %>>Brian Head</option>
+  <option value="Brighton" <%= myAccount[0].resort === 'Brighton' ? 'selected' : '' %>>Brighton</option>
+  <option value="Cherry Peak" <%= myAccount[0].resort === 'Cherry Peak' ? 'selected' : '' %>>Cherry Peak</option>
+  <option value="Deer Valley" <%= myAccount[0].resort === 'Deer Valley' ? 'selected' : '' %>>Deer Valley</option>
+  <option value="Eagle Point" <%= myAccount[0].resort === 'Eagle Point' ? 'selected' : '' %>>Eagle Point</option>
+  <option value="Nordic Valley" <%= myAccount[0].resort === 'Nordic Valley' ? 'selected' : '' %>>Nordic Valley</option>
+  <option value="Park City" <%= myAccount[0].resort === 'Park City' ? 'selected' : '' %>>Park City</option>
+  <option value="Powder Mountain" <%= myAccount[0].resort === 'Powder Mountain' ? 'selected' : '' %>>Powder Mountain</option>
+  <option value="Snowbasin" <%= myAccount[0].resort === 'Snowbasin' ? 'selected' : '' %>>Snowbasin</option>
+  <option value="Snowbird" <%= myAccount[0].resort === 'Snowbird' ? 'selected' : '' %>>Snowbird</option>
+  <option value="Solitude" <%= myAccount[0].resort === 'Solitude' ? 'selected' : '' %>>Solitude</option>
+  <option value="Sundance" <%= myAccount[0].resort === 'Sundance' ? 'selected' : '' %>>Sundance</option>
+  <option value="Woodward" <%= myAccount[0].resort === 'Woodward' ? 'selected' : '' %>>Woodward</option>
+</select>
+
+        <label for="email">email:</label>
+        <input type="text" id="email" name="email" value="<%=myAccount[0].email%>">
         <br><br>
       </fieldset>
       <button type="submit">Save</button>

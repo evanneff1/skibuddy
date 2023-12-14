@@ -201,45 +201,39 @@
       <thead style="background-color: #ace4c9; color: lightslategray;">
         <tr>
           <th style="text-align: left;">Username</th>
-          <th style="text-align: left;">Password</th>
+          <th style="text-align: left;">Name</th>
+          <th style="text-align: left;">Resort</th>
+          <th style="text-align: left;">Email</th>
           <th style="text-align: left;"></th>
-          <th style="text-align: left;"></th>
+
+
 
         </tr>
       </thead>
+
+      
       <tbody style="font-family: Arial; font-size: 9pt;" id="tableBody" name="tableBody">
         <% for (let iCount=0; iCount < myAccounts.length; iCount++) { %>
           <tr>
             <td>
               <%= myAccounts[iCount].username %>
             </td>
-            <td>
-              **************
-            </td>
-            <% if (myAccounts[iCount].username=='admin' ) { %>
-              <td></td>
-              <td></td>
-              <% } else { %>
+              <td><%= myAccounts[iCount].name %></td>
+              <td><%= myAccounts[iCount].resort %></td>
+              <td><%= myAccounts[iCount].email %></td>
                 <td style="text-align: center;">
-                  <form action="/editAccount/<%= myAccounts[iCount].username %>" method="GET">
-                    <button type="submit">Change Password</button>
+                  <form action="/editAccount" method="GET">
+                    <button type="submit">Edit Account</button>
                   </form>
                 </td>
-                <td style="text-align: center;">
-                  <form action="/deleteAccount/<%= myAccounts[iCount].username %>" method="POST">
-                    <button type="submit">Delete</button>
-                  </form>
-                </td>
-                <% } %>
           </tr>
           <% } %>
       </tbody>
+        <button type="submit"><a href="/addDate">addDates</a></button>
     </table>
   </div>
   <br><br>
-  <div class="survey-button"> <a href="/accounts">
-      <span>Create an Account</span>
-    </a></div>
+  
 
 </body>
 
